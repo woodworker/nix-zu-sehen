@@ -13,5 +13,5 @@ pkgs.stdenv.mkDerivation {
   # callPackage can also be replaced by import.  In this case, the
   # arguments of the anonymous function defined in ginsim.nix get
   # their respective default values.
-  buildInputs = [ (pkgs.callPackage ./ttrpg-convert-cli.nix {}) ];
+  buildInputs = [ (pkgs.callPackage ../pkgs/ttrpg-convert-cli {}) ];
 }

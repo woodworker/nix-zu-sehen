@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
         description = "A command-line tool for converting TTRPG character sheets.";
         license = lib.licenses.mit;
         platforms = lib.platforms.unix;
-        maintainers = [ "woodworker" ];
+        maintainers = [
+            { name = "Martin Holzhauer"; email = "martin@holzhauer.eu"; }
+        ];
     };
 }
