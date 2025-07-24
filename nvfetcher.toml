@@ -1,0 +1,9 @@
+# nvfetcher configuration for nix-zu-sehen packages
+
+[ttrpg-convert-cli]
+src.github = "ebullient/ttrpg-convert-cli"
+fetch.url = "https://github.com/ebullient/ttrpg-convert-cli/releases/download/$ver/ttrpg-convert-cli-$ver-runner.jar"
+
+[obsidian-cli]
+src.github = "Yakitrak/obsidian-cli"
+fetch.github = "Yakitrak/obsidian-cli"

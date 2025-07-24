@@ -1,0 +1,17 @@
+# nvfetcher generated files
+_sources/
+
+# Nix build results
+result
+result-*
+
+# Nix shell files
+.nix-shell
+.direnv/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
