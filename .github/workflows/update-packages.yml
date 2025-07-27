@@ -21,11 +21,11 @@ jobs:
         
     - name: Install nvfetcher
       run: |
-        nix-env -iA nixpkgs.nvfetcher
+        nix-env -iA nvfetcher
         
     - name: Install jq for JSON processing
       run: |
-        nix-env -iA nixpkgs.jq
+        nix-env -iA jq
         
     - name: Check for package updates
       id: update
