@@ -3,7 +3,14 @@
 [ttrpg-convert-cli]
 src.github = "ebullient/ttrpg-convert-cli"
 fetch.url = "https://github.com/ebullient/ttrpg-convert-cli/releases/download/$ver/ttrpg-convert-cli-$ver-runner.jar"
+nixzusehen.sha256_source = "fetch_url"
 
 [obsidian-cli]
 src.github = "Yakitrak/obsidian-cli"
 fetch.github = "Yakitrak/obsidian-cli"
+nixzusehen.version_transform = "strip_v"
+
+[hass-node-red]
+src.github = "zachowj/hass-node-red"
+fetch.github = "zachowj/hass-node-red"
+nixzusehen.version_transform = "strip_v"

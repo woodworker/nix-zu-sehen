@@ -23,14 +23,6 @@ jobs:
       run: |
         nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
         nix-channel --update
-
-    - name: Install nvfetcher
-      run: |
-        nix-env -iA nixpkgs.nvfetcher
-        
-    - name: Install jq for JSON processing
-      run: |
-        nix-env -iA nixpkgs.jq
         
     - name: Check for package updates
       id: update

@@ -6,6 +6,7 @@ let
   packages = rec {
     ttrpg-convert-cli = callPackage ./pkgs/ttrpg-convert-cli {};
     obsidian-cli = callPackage ./pkgs/obsidian-cli {};
+    hass-node-red = callPackage ./pkgs/hass-node-red {};
 
     inherit pkgs; # similar to `pkgs = pkgs;` This lets callers use the nixpkgs version defined in this file.
   };

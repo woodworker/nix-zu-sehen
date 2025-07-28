@@ -16,6 +16,7 @@ jobs:
         package:
           - ttrpg-convert-cli
           - obsidian-cli
+          - hass-node-red
       fail-fast: false  # Continue building other packages even if one fails
     
     steps:

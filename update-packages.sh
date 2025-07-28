@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p nvfetcher jq yq-go git coreutils gnused gnugrep
 
 set -euo pipefail
 
@@ -29,62 +30,97 @@ fi
 
 echo -e "${GREEN}📦 Processing package updates...${NC}"
 
-# Function to update package file
+# Function to get override value from nvfetcher.toml
+get_override() {
+    local package="$1"
+    local key="$2"
+    local default="$3"
+    
+    # Use yq to extract the override value, fallback to default if not found
+    yq eval -p toml ".\"$package\".nixzusehen.\"$key\" // \"$default\"" nvfetcher.toml 2>/dev/null || echo "$default"
+}
+
+# Function to update package file generically
 update_package() {
-    local package_name="$1"
-    local package_file="$2"
+    local package="$1"
+    local package_file="pkgs/$package/default.nix"
     
-    echo -e "${YELLOW}Updating ${package_name}...${NC}"
-    
-    # Extract version and sha256 from generated.json
-    local version=$(jq -r ".\"$package_name\".version" _sources/generated.json)
-    local sha256
-    
-    if [[ "$package_name" == "ttrpg-convert-cli" ]]; then
-        # For ttrpg-convert-cli, get SHA256 from the JAR file fetch
-        sha256=$(jq -r ".\"$package_name\".src.sha256" _sources/generated.json)
-    else
-        # For other packages, get SHA256 from GitHub source
-        sha256=$(jq -r ".\"$package_name\".src.sha256" _sources/generated.json)
-    fi
-    
-    if [[ "$version" == "null" || "$sha256" == "null" ]]; then
-        echo -e "${RED}❌ Failed to extract version/sha256 for $package_name${NC}"
+    if [[ ! -f "$package_file" ]]; then
+        echo -e "${RED}❌ Package file not found: $package_file${NC}"
         return 1
     fi
     
-    echo "  Version: $version"
-    echo "  SHA256: $sha256"
+    echo -e "${YELLOW}Updating ${package}...${NC}"
     
-    # Update the package file
-    if [[ "$package_name" == "ttrpg-convert-cli" ]]; then
-        # Update version line
-        sed -i "s/version = \".*\";/version = \"$version\";/" "$package_file"
-        # Update sha256 line - escape special characters in sha256
-        escaped_sha256=$(printf '%s\n' "$sha256" | sed 's/[[\.*^$()+?{|]/\\&/g')
-        sed -i "s/sha256 = \".*\";/sha256 = \"$escaped_sha256\";/" "$package_file"
-    elif [[ "$package_name" == "obsidian-cli" ]]; then
-        # Remove 'v' prefix from version for obsidian-cli package file
-        clean_version=${version#v}
-        # Update version line
-        sed -i "s/version = \".*\";/version = \"$clean_version\";/" "$package_file"
-        # Update sha256 line - escape special characters in sha256
-        escaped_sha256=$(printf '%s\n' "$sha256" | sed 's/[[\.*^$()+?{|]/\\&/g')
-        sed -i "s/sha256 = \".*\";/sha256 = \"$escaped_sha256\";/" "$package_file"
-        # Note: rev is not updated as it uses the variable: rev = "v${version}"
+    # Get override configuration
+    local version_transform=$(get_override "$package" "version_transform" "none")
+    local sha256_source=$(get_override "$package" "sha256_source" "src")
+    
+    # Extract version and sha256 from generated.json
+    local raw_version=$(jq -r ".\"$package\".version" _sources/generated.json)
+    local sha256
+    
+    if [[ "$sha256_source" == "fetch_url" ]]; then
+        # For packages with direct fetch (like JAR files)
+        sha256=$(jq -r ".\"$package\".src.sha256" _sources/generated.json)
+    else
+        # For standard source packages
+        sha256=$(jq -r ".\"$package\".src.sha256" _sources/generated.json)
     fi
     
-    echo -e "${GREEN}✅ Updated $package_name to version $version${NC}"
+    if [[ "$raw_version" == "null" || "$sha256" == "null" ]]; then
+        echo -e "${RED}❌ Failed to extract version/sha256 for $package${NC}"
+        return 1
+    fi
+    
+    # Apply version transformation
+    local version="$raw_version"
+    case "$version_transform" in
+        "strip_v")
+            version=${raw_version#v}
+            ;;
+        "none")
+            version="$raw_version"
+            ;;
+        *)
+            echo -e "${RED}❌ Unknown version_transform: $version_transform${NC}"
+            return 1
+            ;;
+    esac
+    
+    echo "  Raw version: $raw_version"
+    echo "  Processed version: $version"
+    echo "  SHA256: $sha256"
+    echo "  Version transform: $version_transform"
+    echo "  SHA256 source: $sha256_source"
+    
+    # Update the package file
+    # Escape special characters in sha256 for sed
+    local escaped_sha256=$(printf '%s\n' "$sha256" | sed 's/[[\.*^$()+?{|]/\\&/g')
+    
+    # Update version line
+    sed -i "s/version = \".*\";/version = \"$version\";/" "$package_file"
+    
+    # Update sha256 line
+    sed -i "s/sha256 = \".*\";/sha256 = \"$escaped_sha256\";/" "$package_file"
+    
+    echo -e "${GREEN}✅ Updated $package to version $version${NC}"
 }
 
-# Update each package
-if jq -e '.["ttrpg-convert-cli"]' _sources/generated.json > /dev/null; then
-    update_package "ttrpg-convert-cli" "pkgs/ttrpg-convert-cli/default.nix"
-fi
+# Auto-discover packages from nvfetcher.toml and update them
+echo -e "${GREEN}📋 Auto-discovering packages from nvfetcher.toml...${NC}"
 
-if jq -e '.["obsidian-cli"]' _sources/generated.json > /dev/null; then
-    update_package "obsidian-cli" "pkgs/obsidian-cli/default.nix"
-fi
+# Get all package names from nvfetcher.toml
+packages=$(yq eval -p toml 'keys | .[]' nvfetcher.toml)
+
+for package in $packages; do
+    # Check if package exists in generated.json
+    if jq -e ".\"$package\"" _sources/generated.json > /dev/null; then
+        update_package "$package"
+    else
+        echo -e "${YELLOW}⚠️  No updates found for $package${NC}"
+    fi
+done
 
 echo -e "${GREEN}🎉 Package updates completed!${NC}"
 echo -e "${YELLOW}💡 Don't forget to test the packages with: nix-build -A <package-name>${NC}"
