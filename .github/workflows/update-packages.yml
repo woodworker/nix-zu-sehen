@@ -17,7 +17,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Install Nix
       uses: cachix/install-nix-action@v24
       with:
@@ -27,19 +27,19 @@ jobs:
       run: |
         nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
         nix-channel --update
-        
+
     - name: Check for package updates
       id: update
       run: |
         echo "Checking for package updates..."
-        
+
         # Make the update script executable
         chmod +x ./update-packages.sh
-        
+
         # Run the update script and capture output
         if ./update-packages.sh; then
           echo "Updates completed successfully"
-          
+
           # Check if there are any changes
           if git diff --quiet; then
             echo "No updates available"
@@ -47,7 +47,7 @@ jobs:
           else
             echo "Updates found!"
             echo "has_updates=true" >> $GITHUB_OUTPUT
-            
+
             # Get the list of updated packages
             updated_packages=$(git diff --name-only | grep -E 'pkgs/.*/default.nix' | sed 's|pkgs/\(.*\)/default.nix|\1|' | tr '\n' ' ')
             echo "updated_packages=$updated_packages" >> $GITHUB_OUTPUT
@@ -56,47 +56,44 @@ jobs:
           echo "Update script failed"
           exit 1
         fi
-        
+
     - name: Test updated packages
       if: steps.update.outputs.has_updates == 'true'
       run: |
         echo "Testing updated packages..."
-        
+
         # Build all packages to ensure they still work
         for package in ${{ steps.update.outputs.updated_packages }}; do
           echo "Building $package..."
           nix-build -A "$package" --show-trace
         done
-        
+
     - name: Create Pull Request
       if: steps.update.outputs.has_updates == 'true'
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: |
           Update packages: ${{ steps.update.outputs.updated_packages }}
-          
+
           Automated package updates using nvfetcher.
-          
-          🤖 Generated with [Claude Code](https://claude.ai/code)
         title: 'Update packages: ${{ steps.update.outputs.updated_packages }}'
         body: |
           ## Automated Package Updates
-          
+
           This PR contains automated package updates detected by nvfetcher:
-          
+
           **Updated packages:** ${{ steps.update.outputs.updated_packages }}
-          
+
           ### Changes
           - Package versions and checksums have been automatically updated
           - All packages have been tested and build successfully
-          
+
           ### Verification
           - ✅ All updated packages build without errors
           - ✅ Package metadata and checksums are valid
-          
+
           This PR was automatically created by the package update workflow.
-          
-          🤖 Generated with [Claude Code](https://claude.ai/code)
         branch: automated-package-updates
+        branch-suffix: timestamp
         delete-branch: true
