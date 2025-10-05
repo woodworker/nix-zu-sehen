@@ -3,13 +3,13 @@
 buildHomeAssistantComponent rec {
   owner = "zachowj";
   domain = "nodered";
-  version = "4.1.2";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "zachowj";
     repo = "hass-node-red";
     rev = "v${version}";
-    sha256 = "sha256-qRQ4NMKmZUQ9wSYR8i8TPbQc3y69Otp7FSdGuwph14c=";
+    sha256 = "sha256-P7tmvN1d8qFhAi3XcRSzfFppsXtU+fy1DuUalwmJObA=";
   };
 
   dependencies = [];
