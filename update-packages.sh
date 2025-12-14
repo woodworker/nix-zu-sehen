@@ -96,13 +96,13 @@ update_package() {
     
     # Update the package file
     # Escape special characters in sha256 for sed
-    local escaped_sha256=$(printf '%s\n' "$sha256" | sed 's/[[\.*^$()+?{|]/\\&/g')
+    # Escape & for sed replacement
+    escaped_sha256=${sha256//&/\\&}
     
-    # Update version line
-    sed -i "s/version = \".*\";/version = \"$version\";/" "$package_file"
+    # Use # as delimiter to avoid conflicts
+    sed -i "s#sha256 = \".*\";#sha256 = \"$escaped_sha256\";#" "$package_file"
     
-    # Update sha256 line
-    sed -i "s/sha256 = \".*\";/sha256 = \"$escaped_sha256\";/" "$package_file"
+    sed -i "s#version = \".*\";#version = \"$version\";#" "$package_file"
     
     echo -e "${GREEN}✅ Updated $package to version $version${NC}"
 }
