@@ -21,12 +21,12 @@ in
 # features.
 stdenv.mkDerivation rec {
     name = "ttrpg-convert-cli";
-    version = "3.2.1";
+    version = "3.2.2";
 
     # Simply fetch the JAR file of ttrpg-convert-cli.
     src = fetchurl {
         url = "https://github.com/ebullient/ttrpg-convert-cli/releases/download/${version}/ttrpg-convert-cli-${version}-runner.jar";
-        sha256 = "sha256-pF7AAnw/ZuhheROf4sGk6pROfy6f+7yo3SVaYNXZ1/I=";
+        sha256 = "sha256-q0+IwjIETWobzsLd00mEx7CH0CV/jvvkhz+xs0rqqPs=";
     };
     # I fetch the JAR file directly, so no archives to unpack.
     dontUnpack = true;
