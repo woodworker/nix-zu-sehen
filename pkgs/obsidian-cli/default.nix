@@ -2,13 +2,13 @@
 
 pkgs.buildGoModule rec {
   name = "obsidian-cli-${version}";
-  version = "0.2.0"; # replace with the package version
+  version = "0.2.1"; # replace with the package version
 
   src = pkgs.fetchFromGitHub {
     owner = "Yakitrak"; # replace with the GitHub username
     repo = "obsidian-cli"; # replace with the package repository name
     rev = "v${version}"; # replace with the package version tag
-    sha256 = "sha256-wQyQrNkGRmrogc37WRcsjOx2vmMSzKsnEKvv0oHezR0="; # replace with the source code checksum
+    sha256 = "sha256-Fqe3GJgVovBdy6gFPmDQ7jMIoSb1XgSsDW6zacxNRJc="; # replace with the source code checksum
   };
 
   vendorHash = null;#lib.fakeHash;
