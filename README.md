@@ -9,7 +9,7 @@ A private Nix package collection for packages I wanted but weren't available in 
 ```bash
 # Build a specific package
 nix-build -A ttrpg-convert-cli
-nix-build -A obsidian-cli
+nix-build -A notesmd-cli
 nix-build -A hass-node-red
 
 # Build all packages
@@ -23,7 +23,7 @@ nix-shell helper/ttrpg-shell.nix
 
 ### CLI Tools
 - **`ttrpg-convert-cli`** - Java-based tool for converting TTRPG content (JAR from GitHub releases)
-- **`obsidian-cli`** - Go-based tool for Obsidian interaction (built from GitHub source)
+- **`notesmd-cli`** - Go-based tool for interacting with markdown notes/vaults from the terminal, formerly obsidian-cli (built from GitHub source)
 
 ### Home Assistant Components  
 - **`hass-node-red`** - Node-RED Companion integration for Home Assistant
@@ -36,7 +36,7 @@ The repository follows standard Nix packaging patterns:
 ├── default.nix              # Main entry point exposing all packages
 ├── pkgs/                    # Individual package definitions
 │   ├── ttrpg-convert-cli/   # Java JAR package
-│   ├── obsidian-cli/        # Go source package  
+│   ├── notesmd-cli/         # Go source package  
 │   └── hass-node-red/       # Home Assistant component
 ├── helper/                  # Development shells and utilities
 ├── nvfetcher.toml          # Package update configuration
@@ -119,9 +119,9 @@ fetch.url = "https://github.com/ebullient/ttrpg-convert-cli/releases/download/$v
 nixzusehen.sha256_source = "fetch_url"
 
 # Standard source package with version prefix
-[obsidian-cli]
-src.github = "Yakitrak/obsidian-cli"
-fetch.github = "Yakitrak/obsidian-cli"
+[notesmd-cli]
+src.github = "Yakitrak/notesmd-cli"
+fetch.github = "Yakitrak/notesmd-cli"
 nixzusehen.version_transform = "strip_v"
 
 # Home Assistant component
@@ -161,7 +161,7 @@ When adding a new package:
 ```bash
 # Build specific packages
 nix-build -A ttrpg-convert-cli
-nix-build -A obsidian-cli
+nix-build -A notesmd-cli
 nix-build -A hass-node-red
 
 # Build all packages
@@ -177,8 +177,8 @@ nix-env -f . -iA ttrpg-convert-cli
 # TTRPG Convert CLI
 result/bin/ttrpg-convert-cli --help
 
-# Obsidian CLI  
-result/bin/obsidian --help
+# NotesMD CLI (formerly obsidian-cli)
+result/bin/notesmd-cli --help
 
 # Home Assistant Component
 # Copy to Home Assistant custom_components directory:
