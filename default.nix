@@ -5,7 +5,7 @@ with pkgs;
 let
   packages = rec {
     ttrpg-convert-cli = callPackage ./pkgs/ttrpg-convert-cli {};
-    obsidian-cli = callPackage ./pkgs/obsidian-cli {};
+    notesmd-cli = callPackage ./pkgs/notesmd-cli {};
     hass-node-red = callPackage ./pkgs/hass-node-red {};
     truenas-mcp = callPackage ./pkgs/truenas-mcp {};
 

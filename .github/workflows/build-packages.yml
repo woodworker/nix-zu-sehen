@@ -15,7 +15,7 @@ jobs:
       matrix:
         package:
           - ttrpg-convert-cli
-          - obsidian-cli
+          - notesmd-cli
           - hass-node-red
           - truenas-mcp
       fail-fast: false  # Continue building other packages even if one fails
