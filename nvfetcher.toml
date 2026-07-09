@@ -14,3 +14,8 @@ nixzusehen.version_transform = "strip_v"
 src.github = "zachowj/hass-node-red"
 fetch.github = "zachowj/hass-node-red"
 nixzusehen.version_transform = "strip_v"
+
+[truenas-mcp]
+src.github = "truenas/truenas-mcp"
+fetch.github = "truenas/truenas-mcp"
+nixzusehen.version_transform = "strip_v"

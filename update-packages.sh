@@ -107,6 +107,52 @@ update_package() {
     echo -e "${GREEN}✅ Updated $package to version $version${NC}"
 }
 
+# Refresh the Go module vendorHash for buildGoModule packages.
+#
+# nvfetcher only tracks the source hash, not the Go-specific vendorHash that
+# buildGoModule requires. A release that changes Go dependencies therefore
+# leaves a stale vendorHash and the build fails. This builds the package with
+# its current vendorHash: if it still builds, the Go dependencies are unchanged;
+# if it fails with a fixed-output hash mismatch, we capture the correct hash
+# from the error and patch it in. Non-Go packages, and Go packages with no
+# dependencies (vendorHash = null), have no literal vendorHash and are skipped.
+update_go_vendor_hash() {
+    local package="$1"
+    local package_file="pkgs/$package/default.nix"
+
+    if ! grep -qE 'vendorHash = "sha256-' "$package_file"; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}Checking Go vendorHash for ${package}...${NC}"
+
+    local build_output build_status=0
+    build_output=$(nix-build -A "$package" --no-out-link 2>&1) || build_status=$?
+
+    if [[ "$build_status" -eq 0 ]]; then
+        echo -e "${GREEN}✅ Go vendorHash for $package is still valid${NC}"
+        return 0
+    fi
+
+    # Extract the correct hash from the "got: sha256-..." line of the mismatch.
+    local new_hash
+    new_hash=$(printf '%s\n' "$build_output" \
+        | grep -oE 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' \
+        | grep -oE 'sha256-[A-Za-z0-9+/=]+' \
+        | head -1)
+
+    if [[ -z "$new_hash" ]]; then
+        echo -e "${RED}❌ $package failed to build for a reason other than a Go vendorHash mismatch:${NC}"
+        printf '%s\n' "$build_output" | tail -n 20
+        return 1
+    fi
+
+    local escaped_hash=${new_hash//&/\\&}
+    sed -i "s#vendorHash = \"sha256-[^\"]*\";#vendorHash = \"$escaped_hash\";#" "$package_file"
+
+    echo -e "${GREEN}✅ Updated Go vendorHash for $package to $new_hash${NC}"
+}
+
 # Auto-discover packages from nvfetcher.toml and update them
 echo -e "${GREEN}📋 Auto-discovering packages from nvfetcher.toml...${NC}"
 
@@ -117,6 +163,7 @@ for package in $packages; do
     # Check if package exists in generated.json
     if jq -e ".\"$package\"" _sources/generated.json > /dev/null; then
         update_package "$package"
+        update_go_vendor_hash "$package"
     else
         echo -e "${YELLOW}⚠️  No updates found for $package${NC}"
     fi

@@ -17,6 +17,7 @@ jobs:
           - ttrpg-convert-cli
           - obsidian-cli
           - hass-node-red
+          - truenas-mcp
       fail-fast: false  # Continue building other packages even if one fails
     
     steps:
