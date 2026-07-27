@@ -2,13 +2,13 @@
 
 pkgs.buildGoModule rec {
   name = "truenas-mcp-${version}";
-  version = "0.0.4";
+  version = "0.0.6";
 
   src = pkgs.fetchFromGitHub {
     owner = "truenas";
     repo = "truenas-mcp";
     rev = "v${version}";
-    sha256 = "sha256-R+d6qiFM9mwrAXqA8X+m4/x7+pUTq0zN7jshScSgl0o=";
+    sha256 = "sha256-xEiEyUShMVO6OO1/c1sUhhamXjjb+Bss4eNCEil7d4c=";
   };
 
   vendorHash = "sha256-0A+zS5N+LZ7yRabl6BvovpZPq9NErroW21sRfiMTA+c=";
