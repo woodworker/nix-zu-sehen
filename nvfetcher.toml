@@ -24,3 +24,8 @@ nixzusehen.version_transform = "strip_v"
 src.github = "tn5250j/tn5250j"
 fetch.url = "https://github.com/tn5250j/tn5250j/releases/download/$ver/tn5250j-$ver.tgz"
 nixzusehen.sha256_source = "fetch_url"
+
+[mirador]
+src.github = "jchultarsky/mirador"
+fetch.github = "jchultarsky/mirador"
+nixzusehen.version_transform = "strip_v"

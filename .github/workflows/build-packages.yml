@@ -19,14 +19,15 @@ jobs:
           - hass-node-red
           - truenas-mcp
           - tn5250j
+          - mirador
       fail-fast: false  # Continue building other packages even if one fails
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       
     - name: Install Nix
-      uses: cachix/install-nix-action@v24
+      uses: cachix/install-nix-action@v31
       with:
         # Use latest stable Nix
         nix_path: nixpkgs=channel:nixos-unstable
