@@ -19,6 +19,7 @@ jobs:
           - hass-node-red
           - truenas-mcp
           - tn5250j
+          - mirador
       fail-fast: false  # Continue building other packages even if one fails
     
     steps:
