@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mirador";
-  version = "1.5.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "jchultarsky";
     repo = "mirador";
     rev = "v${version}";
-    sha256 = "sha256-00q6lc6wpdFw4Ax1XiUa6H3lsS0KwZXCW9TEKzMqxa8=";
+    sha256 = "sha256-6G69zihj7zv00Av5vhl+FKY7B4mY0vUXSC5R7ZAAKE4=";
   };
 
-  cargoHash = "sha256-Qc23FEUajmJQHJg7Tt17eJpqeDrMOoNnt29knzBeiqE=";
+  cargoHash = "sha256-KkezCtaNb/yKeGkNYG7+1/Kp/B1EeZJKUxESGeS4/G8=";
 
   # The timezone widget's tests resolve real IANA zone names, which needs
   # tzdata present and TZDIR pointed at it inside the build sandbox.
