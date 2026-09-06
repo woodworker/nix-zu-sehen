@@ -2,13 +2,13 @@
 
 pkgs.buildGoModule rec {
   name = "notesmd-cli-${version}";
-  version = "0.3.6"; # replace with the package version
+  version = "0.3.7"; # replace with the package version
 
   src = pkgs.fetchFromGitHub {
     owner = "Yakitrak"; # replace with the GitHub username
     repo = "notesmd-cli"; # replace with the package repository name
     rev = "v${version}"; # replace with the package version tag
-    sha256 = "sha256-TubUNSpLvv3Q8dixeCf7otG6CSlb8haIGqkMFXAsqYI="; # replace with the source code checksum
+    sha256 = "sha256-dENOPkEeKTYPFf467Isoi7kaa8Bh78PqNyzjU8Q6BEc="; # replace with the source code checksum
   };
 
   # The repository vendors its Go dependencies (vendor/ directory),
