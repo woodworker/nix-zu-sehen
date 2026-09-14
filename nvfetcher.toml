@@ -29,3 +29,7 @@ nixzusehen.sha256_source = "fetch_url"
 src.github = "jchultarsky/mirador"
 fetch.github = "jchultarsky/mirador"
 nixzusehen.version_transform = "strip_v"
+[hass-zambretti-sager]
+src.github = "ziffmafiya/zambretti_sager"
+fetch.github = "ziffmafiya/zambretti_sager"
+nixzusehen.version_transform = "strip_v"
