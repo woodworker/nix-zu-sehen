@@ -3,13 +3,13 @@
 buildHomeAssistantComponent rec {
   owner = "ziffmafiya";
   domain = "zambretti_sager";
-  version = "1.9.88";
+  version = "1.9.89";
 
   src = fetchFromGitHub {
     owner = "ziffmafiya";
     repo = "zambretti_sager";
     rev = "v${version}";
-    sha256 = "sha256-BN6E9CFt6tKKjgY0C551eP5cQZlPZL5Z3iM7y24pbII=";
+    sha256 = "sha256-nE3HqCP7A4RupAhK2R65geAQdjiy/uslA5XHYF7Euh4=";
   };
 
   dependencies = [];
