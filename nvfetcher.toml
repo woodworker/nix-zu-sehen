@@ -29,3 +29,13 @@ nixzusehen.sha256_source = "fetch_url"
 src.github = "jchultarsky/mirador"
 fetch.github = "jchultarsky/mirador"
 nixzusehen.version_transform = "strip_v"
+
+[hass-anycubic-cloud]
+src.github = "ljschmitt/hass-anycubic_cloud_v3"
+fetch.github = "ljschmitt/hass-anycubic_cloud_v3"
+nixzusehen.version_transform = "strip_v"
+
+[hass-anycubic-card]
+src.github = "ljschmitt/hass-anycubic_card"
+fetch.github = "ljschmitt/hass-anycubic_card"
+nixzusehen.version_transform = "strip_v"
