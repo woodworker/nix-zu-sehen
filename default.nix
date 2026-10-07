@@ -10,6 +10,8 @@ let
     truenas-mcp = callPackage ./pkgs/truenas-mcp {};
     tn5250j = callPackage ./pkgs/tn5250j {};
     mirador = callPackage ./pkgs/mirador {};
+    hass-anycubic-cloud = callPackage ./pkgs/hass-anycubic-cloud {};
+    hass-anycubic-card = callPackage ./pkgs/hass-anycubic-card {};
 
     inherit pkgs; # similar to `pkgs = pkgs;` This lets callers use the nixpkgs version defined in this file.
   };
