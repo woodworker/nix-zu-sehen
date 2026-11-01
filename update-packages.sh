@@ -139,7 +139,7 @@ update_go_vendor_hash() {
     new_hash=$(printf '%s\n' "$build_output" \
         | grep -oE 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' \
         | grep -oE 'sha256-[A-Za-z0-9+/=]+' \
-        | head -1)
+        | head -1 || true)
 
     if [[ -z "$new_hash" ]]; then
         echo -e "${RED}❌ $package failed to build for a reason other than a Go vendorHash mismatch:${NC}"
@@ -185,7 +185,7 @@ update_cargo_hash() {
     new_hash=$(printf '%s\n' "$build_output" \
         | grep -oE 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' \
         | grep -oE 'sha256-[A-Za-z0-9+/=]+' \
-        | head -1)
+        | head -1 || true)
 
     if [[ -z "$new_hash" ]]; then
         echo -e "${RED}❌ $package failed to build for a reason other than a cargoHash mismatch:${NC}"

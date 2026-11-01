@@ -1,6 +1,6 @@
 { pkgs, go, lib }:
 
-pkgs.buildGoModule rec {
+pkgs.buildGo127Module rec {
   name = "truenas-mcp-${version}";
   version = "0.0.6";
 
