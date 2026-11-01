@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "anycubic-card";
-  version = "0.4.1";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "ljschmitt";
     repo = "hass-anycubic_card";
     rev = "v${version}";
-    sha256 = "sha256-lVlxu7RbHTtbDynSdsbydwfRN4Hu8oCfEqYrDOQwncs=";
+    sha256 = "sha256-d6h03rxJBGYwzm3ERBgIfIic7bfIiC72t9b9n6sub5w=";
   };
 
   installPhase = ''

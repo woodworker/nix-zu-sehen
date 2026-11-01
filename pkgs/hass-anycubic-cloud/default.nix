@@ -3,13 +3,13 @@
 buildHomeAssistantComponent rec {
   owner = "ljschmitt";
   domain = "anycubic_ha_integration";
-  version = "0.4.1";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "ljschmitt";
     repo = "hass-anycubic_cloud_v3";
     rev = "v${version}";
-    sha256 = "sha256-HjI4EO7LPMr8H6kRzWVxGncOIprNuSXXe1UXRblZ3Zg=";
+    sha256 = "sha256-GMbd9IrYVl4Zrsg5dilqm4iRccxE54FV9NJkPz0chnc=";
   };
 
   dependencies = with home-assistant.python3Packages; [
