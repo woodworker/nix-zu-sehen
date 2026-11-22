@@ -19,13 +19,13 @@ let
 in
 (pkgs.buildGo127Module.override { go = go_1_27; }) rec {
   name = "truenas-mcp-${version}";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = pkgs.fetchFromGitHub {
     owner = "truenas";
     repo = "truenas-mcp";
     rev = "v${version}";
-    sha256 = "sha256-iZS6hqzTQQfCWsdK6f6jf/ItYPU3XNj3NJJNht6DtAM=";
+    sha256 = "sha256-GgZ8I4kRxJNrctqSg/PxAaksgdekQPL3bD4+eK2wCIU=";
   };
 
   vendorHash = "sha256-RCcyGLepRB1YMTb6hvAyskYTzHrKlwqjRdnRLfdydls=";
